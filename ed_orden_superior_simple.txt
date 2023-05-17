@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <math.h>
+int main()
+{
+    double a, b, c, d, discriminante, raiz1, raiz2, parteReal, parteImaginaria, inicialY, inicialYprima,
+    C1, C2;
+    printf("Aplicacion para resolver ecuaciones diferenciales unicamente de orden superior\n\r");
+	printf("LAS CONDICIONES INICIALES OBLIGATORIAMENTE DEBEN DE ENCONTARSE EN LA FORMA x=0\n\r");
+    //ECUACION DIFERENCIAL EN SI
+	printf("Escribe los coefficientes de la ecuacion diferencial de la forma: y'' + y' + y = 0 \n\r");
+	printf("y'': \n\r");
+	scanf("%lf", &a);
+	printf("y': \n\r");
+	scanf("%lf", &b);
+	printf("y: \n\r");
+	scanf("%lf", &c);
+
+	//VALORES INICIALES
+	printf("Escribe los valores iniciales de la ecuacion diferencial\n\r");
+	printf(" y(0): \n\r");
+	scanf("%lf", &inicialY);
+	printf(" y'(0): \n\r");
+	scanf("%lf", &inicialYprima);
+
+	//RAICES DE LA ECUACION
+	discriminante = (b*b)-(4*a*c);
+	if (discriminante > 0) {
+		//RAICES REALES Y DISTINTAS
+		raiz1 = (-b - sqrt(discriminante))/(2*a);
+		raiz2 = (-b + sqrt(discriminante))/(2*a);
+		printf("Las raices son: m1 = %.2lf y m2 = %.2lf\n\r", raiz1, raiz2);
+
+		printf("La solucion complementaria es: 'y = C1*e^(%.2lfx) +C2*e^(%.2lfx)'\n\r", raiz1, raiz2);
+
+		C2 = inicialYprima - (raiz1*C1);
+		C1 = (-1)*(C2);
+		printf("La solucion particular es: 'y = %.2lf*e^(%.2lfx) %+.2lf*e^(%.2lfx)' \n\r", C1, raiz1, C2,
+		raiz2);
+	}
+	else if (discriminante == 0){
+		//RAICES REALES REPETIDAS
+		raiz1 = (-b/(2*a));
+		printf("La raiz es: %.2lf\n\r", raiz1);
+
+		printf("La solucion complementaria es: 'y = C1*e^(%.2lfx) +C2*x*e^(%.2lfx)'\n\r", raiz1, raiz1);
+
+		C1 = inicialY;
+		C2 = inicialYprima - raiz1 * C1;
+		printf("La solucion particular es: y = %.2lf*e^(%.2lfx) %+.2lf*x*e^(%.2lfx)", C1, raiz1, C2,
+		raiz1);
+	}
+	else {
+		//RAICES COMPLEJAS
+		parteReal = (-b/(-2*a));
+		parteImaginaria = (sqrt(-discriminante)) / (-2*a);
+
+		if (parteImaginaria < 0)
+		{
+			parteImaginaria = parteImaginaria*(-1);
+		}
+		if (parteReal < 0)
+		{
+			parteReal = parteReal*(-1);
+		}
+
+		printf("Las raices son: '%.2lf - %.2lfi' y '%.2lf + %.2lfi'\n\r", parteReal, parteImaginaria,
+		parteReal, parteImaginaria);
+
+		printf("\n\r");
+
+		printf("La solucion complementaria es: 'y = e^(%.2lfx)*[C1*cos(%.2lfx) +C2*sen(%.2lfx)]'\n\r",
+		parteReal, parteImaginaria, parteImaginaria);
+
+		printf("\n\r");
+
+		//SOLUCION PARTICULAR
+		C1 = inicialY;
+		C2 = (inicialYprima-(C1*parteReal))/parteImaginaria;
+		//printf("C1 = %.2lf\n\r", C1);
+		//printf("C2 = %.2lf\n\r", C2);
+		printf("La solucion particular es: 'y = e^(%.2lfx)*[%.2lf*cos(%.2lfx) %+.2f*sen(%.2lfx)]' \n\r",
+		parteReal, C1, parteImaginaria, C2, parteImaginaria);
+	}
+    return 0;
+}
